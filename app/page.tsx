@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
+import styles from './page.module.css'; 
 
 interface Character {
   id: number;
   name: string;
+  image: string;
 }
 
 const Home: React.FC = () => {
@@ -15,7 +17,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchCharacters = async (page: number) => {
-      const res = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+      const res = await fetch(`https://rickandmortyapi.com/api/character?page=${page}&limit=14`);
       const data = await res.json();
       setCharacters(data.results);
       setPageCount(data.info.pages);
@@ -31,11 +33,14 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1>Rick and Morty Characters</h1>
-      <ul>
+      <div className={styles.grid}>
         {characters.map((character) => (
-          <li key={character.id}>{character.name}</li>
+          <div key={character.id} className={styles.card}>
+            <img src={character.image} alt={character.name} />
+            <h2>{character.name}</h2>
+          </div>
         ))}
-      </ul>
+      </div>
       <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
     </div>
   );
