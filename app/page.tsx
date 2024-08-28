@@ -10,6 +10,7 @@ interface Character {
   id: number;
   name: string;
   image: string;
+  status: string;
 }
 
 const Home: React.FC = () => {
@@ -67,7 +68,7 @@ const Home: React.FC = () => {
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className={styles.grid}>
         {filteredCharacters.map((character) => (
-          <CharacterCard key={character.id} id={character.id} name={character.name} image={character.image} />
+          <CharacterCard key={character.id} id={character.id} name={character.name} image={character.image} status={character.status} />
         ))}
       </div>
       <div className={styles.paginationContainer}>

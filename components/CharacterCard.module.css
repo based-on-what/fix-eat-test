@@ -19,7 +19,7 @@
   margin-top: 10px;
   font-size: 1.2em;
   color: black; /* Letra negra */
-  text-align: center; /* Centrar texto */
+  text-align: center; /* Justificar texto */
   width: 100%; /* Asegurar que el texto ocupe todo el ancho del contenedor */
 }
 
