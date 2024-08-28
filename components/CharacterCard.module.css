@@ -1,0 +1,29 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.card h2 {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: black; /* Letra negra */
+  text-align: center; /* Centrar texto */
+  width: 100%; /* Asegurar que el texto ocupe todo el ancho del contenedor */
+}
+
+.card:hover {
+  background-color: #eaeaea; /* Fondo gris al pasar el mouse */
+  color: grey; /* Letra gris al pasar el mouse */
+}
