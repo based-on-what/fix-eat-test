@@ -14,22 +14,12 @@ interface Character {
 }
 
 const Home: React.FC = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [filteredCharacters, setFilteredCharacters] = useState<Character[]>([]);
-  const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchCharacters = async (page: number) => {
-      const res = await fetch(`https://rickandmortyapi.com/api/character?page=${page}&limit=20`);
-      const data = await res.json();
-      setCharacters(data.results);
-      setPageCount(data.info.pages);
-    };
-
-    fetchCharacters(currentPage);
-  }, [currentPage]);
+  const charactersPerPage = 20; // Número de personajes por página
 
   useEffect(() => {
     const fetchAllCharacters = async () => {
@@ -45,34 +35,41 @@ const Home: React.FC = () => {
         page++;
       }
 
-      const results = allCharacters.filter(character =>
-        character.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCharacters(results);
+      setAllCharacters(allCharacters);
+      setFilteredCharacters(allCharacters); // Inicialmente, sin filtros
     };
 
-    if (searchTerm) {
-      fetchAllCharacters();
-    } else {
-      setFilteredCharacters(characters);
-    }
-  }, [characters, searchTerm]);
+    fetchAllCharacters();
+  }, []);
+
+  useEffect(() => {
+    const results = allCharacters.filter(character =>
+      character.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCharacters(results);
+    setCurrentPage(1); // Reinicia la página a 1 al buscar
+  }, [searchTerm, allCharacters]);
 
   const handlePageClick = (data: { selected: number }) => {
     setCurrentPage(data.selected + 1);
   };
+
+  // Calcular los personajes a mostrar en la página actual
+  const indexOfLastCharacter = currentPage * charactersPerPage;
+  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
+  const currentCharacters = filteredCharacters.slice(indexOfFirstCharacter, indexOfLastCharacter);
 
   return (
     <div className={styles.container}>
       <h1>Rick and Morty Characters</h1>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className={styles.grid}>
-        {filteredCharacters.map((character) => (
+        {currentCharacters.map((character) => (
           <CharacterCard key={character.id} id={character.id} name={character.name} image={character.image} status={character.status} />
         ))}
       </div>
       <div className={styles.paginationContainer}>
-        <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
+        <Pagination pageCount={Math.ceil(filteredCharacters.length / charactersPerPage)} onPageChange={handlePageClick} />
       </div>
     </div>
   );

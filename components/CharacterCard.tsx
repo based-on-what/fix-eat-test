@@ -6,7 +6,7 @@ interface CharacterCardProps {
   id: number;
   name: string;
   image: string;
-  //status: string; // Parámetro adicional como ejemplo
+  status: string;
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({ id, name, image }) => {
