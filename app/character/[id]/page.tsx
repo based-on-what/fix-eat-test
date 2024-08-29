@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation'; // Importa useRouter desde next/navigation
+import { useSearchParams, useRouter } from 'next/navigation'; // Importa useRouter desde next/navigation (no desde next/router ya que tuve bastantes problemas con eso)
 import styles from './CharacterDetail.module.css';
 
 interface Character {
@@ -20,7 +20,7 @@ const CharacterDetail: React.FC = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const [character, setCharacter] = useState<Character | null>(null);
-  const router = useRouter(); // Usa useRouter de next/navigation
+  const router = useRouter(); 
 
   useEffect(() => {
     if (id) {
@@ -34,17 +34,18 @@ const CharacterDetail: React.FC = () => {
     } else {
       console.log(searchParams);
       console.log(id);
+      // imprimir en consola el searchParams y el id, los usé para "debuggear" pero ya no tengo errores
     }
   }, [id]);
 
   if (!character) {
     return <div className="flex justify-center items-center">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900">
-              
+
             </div>
           </div>
   
-  }
+  } // No consideré necesario instalar una librería de íconos, además, como suele ser bastante rápida la respuesta de la API, es casi imperceptible
 
   return (
     <div className={styles.container}>

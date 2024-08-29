@@ -8,27 +8,24 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ pageCount, onPageChange }) => {
-  const [showInput, setShowInput] = useState(false);
   const [pageNumber, setPageNumber] = useState<number | string>('');
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const handlePageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '' || (Number(value) >= 1 && Number(value) <= 42)) {
       setPageNumber(value);
+    } else {
+      alert('Page number must be between 1 and 42');
     }
   };
 
   const handlePageSubmit = () => {
     if (pageNumber !== '' && Number(pageNumber) >= 1 && Number(pageNumber) <= 42) {
-      onPageChange({ selected: Number(pageNumber) - 1 });
-      setShowInput(false);
+      const selectedPage = Number(pageNumber) - 1;
+      onPageChange({ selected: selectedPage });
+      setCurrentPage(selectedPage);
       setPageNumber('');
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handlePageSubmit();
     }
   };
 
@@ -37,38 +34,32 @@ const Pagination: React.FC<PaginationProps> = ({ pageCount, onPageChange }) => {
       <ReactPaginate
         previousLabel={'<'}
         nextLabel={'>'}
-        breakLabel={
-          <span
-            className={styles.breakLabel}
-            onMouseEnter={() => setShowInput(true)}
-            onMouseLeave={() => setShowInput(false)}
-          >
-            ...
-          </span>
-        }
+        breakLabel={'...'}
         breakClassName={'break-me'}
         pageCount={pageCount}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
-        onPageChange={onPageChange}
+        onPageChange={(data) => {
+          setCurrentPage(data.selected);
+          onPageChange(data);
+        }}
         containerClassName={styles.pagination}
         activeClassName={styles.active}
       />
-      {showInput && (
-        <div className={styles.pageInputContainer}>
-          <input
-            type="number"
-            value={pageNumber}
-            onChange={handlePageInput}
-            onKeyPress={handleKeyPress}
-            className={styles.pageInput}
-            min="1"
-            max="42"
-            placeholder="Page #"
-          />
-          <button onClick={handlePageSubmit} className={styles.pageButton}>Go</button>
-        </div>
-      )}
+      <div className={styles.pageInputContainer}>
+        <input
+          type="number"
+          value={pageNumber}
+          onChange={handlePageInput}
+          className={styles.pageInput}
+          min="1"
+          max="42"
+          placeholder="Page #"
+        />
+        <button onClick={handlePageSubmit} className={styles.pageButton}>
+          Go
+        </button>
+      </div>
     </div>
   );
 };

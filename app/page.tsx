@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const charactersPerPage = 20; // Número de personajes por página
+  const charactersPerPage = 20; // Número de personajes por página (forzado)
 
   useEffect(() => {
     const fetchAllCharacters = async () => {
